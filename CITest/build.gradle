@@ -1,0 +1,55 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:0.6.+'
+    }
+}
+apply plugin: 'android'
+
+repositories {
+    mavenCentral()
+}
+
+android {
+    compileSdkVersion 18
+    buildToolsVersion "18.1.0"
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 18
+    }
+
+    buildTypes {
+        debug {
+            packageNameSuffix ".debug"
+        }
+    }
+}
+
+sourceSets {
+	unitTest {
+		java.srcDir file('src/test/java')
+		resources.srcDir file('src/test/resources')
+	}
+}
+
+configurations {
+	unitTestCompile.extendsFrom runtime
+	unitTestRuntime.extendsFrom unitTestCompile
+}
+
+dependencies {
+    instrumentTestCompile group: 'junit', name: 'junit', version: '4.5+'
+    unitTestCompile group: 'junit', name: 'junit', version: '4.5+'
+    unitTestCompile files("$project.buildDir/classes/release")
+}
+
+task unitTest(type:Test, dependsOn: assemble) {
+	description = "run unit tests"
+	testClassesDir = project.sourceSets.unitTest.output.classesDir
+	classpath = project.sourceSets.unitTest.runtimeClasspath
+}
+
+check.dependsOn unitTest
