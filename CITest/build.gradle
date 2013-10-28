@@ -42,8 +42,13 @@ configurations {
 
 dependencies {
     instrumentTestCompile group: 'junit', name: 'junit', version: '4.5+'
+
     unitTestCompile group: 'junit', name: 'junit', version: '4.5+'
+    unitTestCompile 'org.mockito:mockito-core:1.9.0'
+    unitTestCompile 'com.google.android:android:4.0.1.2'
+    unitTestCompile 'com.pivotallabs:robolectric:1.2'
     unitTestCompile files("$project.buildDir/classes/release")
+	configurations.unitTestCompile.exclude group: 'com.google.android.maps'
 }
 
 task unitTest(type:Test, dependsOn: assemble) {
